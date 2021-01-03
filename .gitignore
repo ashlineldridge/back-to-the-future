@@ -1,0 +1,10 @@
+build*/
+/.idea/
+/cmake-build*/
+.clangd/
+compile_commands.json
+corpora/
+/.vscode/
+__pycache__
+/conan.log
+

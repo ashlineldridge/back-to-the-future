@@ -1,0 +1,3 @@
+// Build-time configured options
+#define cpp_journey_VERSION_MAJOR @cpp_journey_VERSION_MAJOR@
+#define cpp_journey_VERSION_MINOR @cpp_journey_VERSION_MINOR@
