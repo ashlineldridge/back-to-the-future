@@ -4,9 +4,9 @@
 #include <vector>
 
 enum class AdType {
-  classic,
-  stand_out,
-  premium,
+  Classic,
+  StandOut,
+  Premium,
 };
 
 
@@ -34,16 +34,16 @@ public:
 
 class GroupPricingRule : public PricingRule {
 public:
-  virtual
+  
   PricingResult execute(const std::vector<Ad> &ads) override {
-
+    return PricingResult{};
   }
 };
 
 class XForYPricingRule : public PricingRule {
 public:
   XForYPricingRule(AdType type, double x, double y) : type_(type), x_(x), y_(y) {
-    assert(x > 0 && y > 0 && x >= y);
+    //    assert(x > 0 && y > 0 && x >= y);
   }
 
   PricingResult execute(const std::vector<Ad> &ads) override {
@@ -60,6 +60,8 @@ public:
         res.price += bundle[0].price() * y_;
       }
     }
+
+    return res;
   }
 
 private:
@@ -67,13 +69,3 @@ private:
   int x_;
   int y_;
 };
-
-class XForYPricingRule : public PricingRule {
-public:
-  PricingResult execute(const std::vector<Ad> &ads) override {
-
-  }
-};
-
-
-

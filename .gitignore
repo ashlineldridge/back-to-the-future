@@ -7,6 +7,7 @@ BROWSE
 .clangd
 .classpath
 .clwb/
+.ccls-cache/
 /ci/bazel-*
 compile_commands.json
 cscope.*
