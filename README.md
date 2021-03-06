@@ -1,12 +1,6 @@
-# Learning C++
+# CBot
 
-Repository used to document my journey (back) into C++.
-
-## Emacs Integration
-
-Run the `bazel-compdb` (from [here][02]) at the root of this repository
-(with no arguments) to produce `compile_commands.json` which the Emacs
-package lsp-mode then provides to clangd for language server integration.
+CBot is a personal [GitHub App][01] that I'm using to learn modern C++ and [Bazel][02].
 
 ## Building
 
@@ -14,12 +8,14 @@ package lsp-mode then provides to clangd for language server integration.
 bazel build //src/...
 ```
 
-## Links
+## Clangd Integration
 
-1. [Modern CMake][01]
-2. [bazel-compilation-database][02]
+Run [bazel-compdb][03] in the root of this repository to produce the `compile_commands.json`
+file used by clangd. Emacs integration is provided by [lsp-mode][04].
 
 <!-- Links -->
 
-[01]: https://cliutils.gitlab.io/modern-cmake
-[02]: https://github.com/grailbio/bazel-compilation-database
+[01]: https://docs.github.com/en/developers/apps/about-apps
+[02]: https://bazel.build
+[03]: https://github.com/grailbio/bazel-compilation-database
+[04]: https://github.com/emacs-lsp/lsp-mode
