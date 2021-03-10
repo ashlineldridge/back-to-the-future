@@ -7,6 +7,7 @@ cc_binary(
     ],
     deps = [
         "//src/domain",
+        "//external:nghttp2",
         "@com_google_googletest//:gtest",
     ],
     visibility = ["//visibility:public"],

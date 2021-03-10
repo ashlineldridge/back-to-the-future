@@ -28,14 +28,13 @@ def cbot_cmake_external(
         # TODO: Add iterator of the first list presented of these options;
         # static_libraries[.pdb], pdb_names, name[.pdb] files
         if pdb_name == "":
-            pdb_name p= name
+            pdb_name = name
 
         copy_command = "cp {cmake_files_dir}/{pdb_name}.dir/{pdb_name}.pdb $INSTALLDIR/lib/{pdb_name}.pdb".format(cmake_files_dir = cmake_files_dir, pdb_name = pdb_name)
         if postfix_script != "":
             copy_command = copy_command + " && " + postfix_script
 
         pf = select({
-            # "@envoy//bazel:windows_dbg_build": copy_command,
             "//conditions:default": postfix_script,
         })
     else:
@@ -44,13 +43,11 @@ def cbot_cmake_external(
     cmake_external(
         name = name,
         cache_entries = select({
-            # "@envoy//bazel:opt_build": cache_entries,
             "//conditions:default": cache_entries_debug,
         }),
         cmake_options = cmake_options,
         # TODO(lizan): Make this always true
         generate_crosstool_file = select({
-            # "@envoy//bazel:windows_x86_64": True,
             "//conditions:default": generate_crosstool_file,
         }),
         lib_source = lib_source,
