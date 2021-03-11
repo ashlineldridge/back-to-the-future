@@ -7,11 +7,8 @@ cc_binary(
     ],
     deps = [
         "//src/domain",
-        "//external:nghttp2",
-        "//external:boost",
-        "@com_google_googletest//:gtest",
+        "//bazel/ext:nghttp2",
+        "//bazel/ext:boost",
     ],
-    defines = ["BOOST_ASIO_SEPARATE_COMPILATION"],
-    # -lnghttp2_asio -lboost_system
     visibility = ["//visibility:public"],
 )

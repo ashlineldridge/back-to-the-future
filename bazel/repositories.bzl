@@ -1,96 +1,54 @@
 load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
-load(":repository_locations.bzl", "REPOSITORY_LOCATIONS")
 
-BUILD_ALL_CONTENT = """
+all_content = """
 filegroup(name = "all",
 srcs = glob(["**"]),
 visibility = ["//visibility:public"])
 """
 
-def cbot_dependencies():
-    _foreign_cc_dependencies()
-    _com_github_nghttp2_nghttp2()
-    _com_bintray_boostorg_boost()
-    _com_google_googletest()
-    _openssl()
-    
-def _foreign_cc_dependencies():
-    location = REPOSITORY_LOCATIONS["rules_foreign_cc"]
+def init_repositories():
     http_archive(
         name = "rules_foreign_cc",
-        **location,
-    )    
-    
-def _com_github_nghttp2_nghttp2():
-    location = REPOSITORY_LOCATIONS["com_github_nghttp2_nghttp2"]
-    http_archive(
-        name = "com_github_nghttp2_nghttp2",
-        build_file_content = BUILD_ALL_CONTENT,
-        **location,
+        sha256 = "c2cdcf55ffaf49366725639e45dedd449b8c3fe22b54e31625eb80ce3a240f1e",
+        strip_prefix = "rules_foreign_cc-0.1.0",
+        url = "https://github.com/bazelbuild/rules_foreign_cc/archive/0.1.0.zip",
     )
-    native.bind(
+    http_archive(
         name = "nghttp2",
-        actual = "@cbot//bazel/foreign_cc:nghttp2",
+        sha256 = "45cc3ed91966551f92b31958ceca9b3a9f23ce4faf5cbedb78aa3327cd4e5907",
+        strip_prefix = "nghttp2-1.43.0",
+        url = "https://github.com/nghttp2/nghttp2/releases/download/v1.43.0/nghttp2-1.43.0.tar.gz",
+        build_file_content = all_content,
     )
-
-    
-def _com_bintray_boostorg_boost():
-    location = REPOSITORY_LOCATIONS["com_bintray_boostorg_boost"]
     http_archive(
-        name = "com_bintray_boostorg_boost",
-        build_file_content = BUILD_ALL_CONTENT,
-        **location,
-    )
-    native.bind(
         name = "boost",
-        actual = "@cbot//bazel/foreign_cc:boost",
+        sha256 = "aeb26f80e80945e82ee93e5939baebdca47b9dee80a07d3144be1e1a6a66dd6a",
+        strip_prefix = "boost_1_75_0",
+        url = "https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.gz",
+        build_file_content = all_content,
     )
-    
-def _com_google_googletest():
-    location = REPOSITORY_LOCATIONS["com_google_googletest"]
-    http_archive(
-        name = "com_google_googletest",
-        **location,
-    )
-    # Why is this binding different looking?
-    native.bind(
-        name = "googletest",
-        actual = "@com_google_googletest//:gtest",
-    )
-
-# TODO: consistent function naming
-# TODO: just bring those things in here
-# def _boringssl():
-#     http_archive(
-#         name = "boringssl",
-#         # Use github mirror instead of https://boringssl.googlesource.com/boringssl
-#         # to obtain a boringssl archive with consistent sha256
-#         sha256 = "269c89eb60d3f3fcd5a0a755d1e28ffa65d423bc3c0e9562e2d666f5464680d2",
-#         strip_prefix = "boringssl-1a7359455220f7010def8c63f7c7e041ce6707c6",
-#         urls = [
-#             "https://storage.googleapis.com/grpc-bazel-mirror/github.com/google/boringssl/archive/1a7359455220f7010def8c63f7c7e041ce6707c6.tar.gz",
-#             "https://github.com/google/boringssl/archive/1a7359455220f7010def8c63f7c7e041ce6707c6.tar.gz",
-#         ],
-#     )
-#     native.bind(
-#         name = "libssl",
-#         actual = "@boringssl//:ssl",
-#     )
-
-def _openssl():
     http_archive(
         name = "openssl",
         sha256 = "22d6588e4a7c5ad48fcac2fbf1d035bd43258c22a49457dad0539ded0651b4d2",
-        build_file_content = BUILD_ALL_CONTENT,
         strip_prefix = "openssl-OpenSSL_1_1_1j",
-        urls = ["https://github.com/openssl/openssl/archive/OpenSSL_1_1_1j.tar.gz"],
+        url = "https://github.com/openssl/openssl/archive/OpenSSL_1_1_1j.tar.gz",
+        build_file_content = all_content,
     )
-
-# TODO: switch out boring for OpenSSL
-# See:
-# https://nghttp2.org/documentation/package_README.html#building-nghttp2-from-release-tar-archive
-# https://github.com/openssl/openssl/issues/3840
-# https://github.com/bazelbuild/rules_foreign_cc/issues/337#issuecomment-582724820
-# https://github.com/bazelbuild/rules_foreign_cc/issues/337
-# 
+    http_archive(
+        name = "googletest",
+        sha256 = "9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb",
+        strip_prefix = "googletest-release-1.10.0",
+        url = "https://github.com/google/googletest/archive/release-1.10.0.tar.gz",
+    )
+    http_archive(
+        name = "bazel_skylib",
+        sha256 = "1c531376ac7e5a180e0237938a2536de0c54d93f5c278634818e0efc952dd56c",
+        url = "https://github.com/bazelbuild/bazel-skylib/releases/download/1.0.3/bazel-skylib-1.0.3.tar.gz",
+    )
+    http_archive(
+        name = "bazel_compdb",
+        sha256 = "bcecfd622c4ef272fd4ba42726a52e140b961c4eac23025f18b346c968a8cfb4",
+        strip_prefix = "bazel-compilation-database-0.4.5",
+        url = "https://github.com/grailbio/bazel-compilation-database/archive/0.4.5.tar.gz",
+    )

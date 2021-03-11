@@ -4,14 +4,18 @@ CBot is a personal [GitHub App][01] that I'm using to learn modern C++ and [Baze
 
 ## Building
 
-```bash
-bazel build //src/...
-```
+See [Makefile](Makefile) for targets.
 
 ## Clangd Integration
 
-Run [bazel-compdb][03] in the root of this repository to produce the `compile_commands.json`
-file used by clangd. Emacs integration is provided by [lsp-mode][04].
+Run `make compdb` to produce the `compile_commands.json` file used by clangd. Emacs integration is
+provided by [lsp-mode][04].
+
+## TODO
+
+- Get this building for both Darwin and Linux (create docker-build target).
+- Add targets for linting, etc.
+- Add BZ target for compdb.
 
 <!-- Links -->
 

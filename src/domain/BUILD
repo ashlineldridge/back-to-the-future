@@ -4,5 +4,5 @@ cc_library(
     name = "domain",
     srcs = ["ad.cc"],
     hdrs = ["ad.h"],
-    visibility = ["//src/exe:__pkg__"],
+    visibility = ["//visibility:public"],    
 )
