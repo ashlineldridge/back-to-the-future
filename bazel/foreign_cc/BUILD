@@ -1,8 +1,7 @@
-load("//bazel:build_system.bzl", "cbot_cmake_external", "cbot_package")
 load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
 load("@rules_foreign_cc//tools/build_defs:boost_build.bzl", "boost_build")
 
-cbot_package()
+package(default_visibility = ["//visibility:public"])
 
 configure_make(
     name = "nghttp2",
@@ -13,17 +12,19 @@ configure_make(
         "--disable-shared",
         "--enable-asio-lib",
         "--with-boost-libdir=$EXT_BUILD_DEPS/boost/lib",
-        # "--boost-asio-libdir=$EXT_BUILD_DEPS/boost/lib"
     ],
     lib_source = "@com_github_nghttp2_nghttp2//:all",
-    static_libraries = ["libnghttp2.a"],
+    static_libraries = [
+        "libnghttp2.a",
+        "libnghttp2_asio.a",
+    ],
     configure_env_vars = {
         "CXXFLAGS": "-std=c++14",
         "AR": "/usr/bin/ar",        
     },
     deps = [
         ":boost",
-        # ":boringssl",
+        ":openssl",
     ],
 )
 
@@ -35,23 +36,57 @@ boost_build(
     static_libraries = [
         "libboost_system.a",
         "libboost_thread.a",
-        "libboost_date_time.a",        
-        "libboost_regex.a",
-        "libboost_serialization.a",        
-    ],
-    deps = [
-        "//external:libssl",
+        # "libboost_date_time.a",        
+        # "libboost_regex.a",
+        # "libboost_serialization.a",        
     ],
     user_options = [
+        # "--with-context",
         "--with-system",
         "--with-thread",
-        "--with-date_time",
-        "--with-regex",
-        "--with-serialization",
+        # "--with-date_time",
+        # "--with-regex",
+        # "--with-serialization",
         # "link=static",
         # "cflags=-fPIC",
         # "cxxflags=-fPIC",
         # "linkflags=-fPIC",
     ],
     visibility = ["//visibility:public"],
+)
+
+config_setting(
+    name = "darwin_build",
+    values = {"cpu": "darwin"},
+)
+
+# See https://wiki.openssl.org/index.php/Compilation_and_Installation
+# See https://github.com/bazelbuild/rules_foreign_cc/issues/338
+
+configure_make(
+    name = "openssl",
+    configure_command = "config",
+    configure_options = [
+        "no-shared",
+    ] + 
+    select({
+            ":darwin_build": [
+              "enable-ec_nistp_64_gcc_128",
+              "no-ssl2",
+              "no-ssl3", "no-comp"
+            ],
+            "//conditions:default": []}),
+    lib_source = "@openssl//:all",
+    visibility = ["//visibility:public"],
+    configure_env_vars = 
+        select({
+            ":darwin_build": {
+              "OSX_DEPLOYMENT_TARGET": "10.15",
+              "AR": "/usr/bin/ar",
+            },
+            "//conditions:default": {}}),
+    static_libraries = [
+        "libssl.a",
+        "libcrypto.a",
+    ]
 )
