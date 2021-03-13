@@ -47,4 +47,4 @@ build:
 compdb:
 	@$(call banner,Building compilation database)
 	bazel build //bazel:compdb
-
+	@ln -sf bazel-bin/bazel/compile_commands.json compile_commands.json
