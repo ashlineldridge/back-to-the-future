@@ -9,6 +9,7 @@ cc_binary(
         "//src/domain",
         "//bazel/ext:nghttp2",
         "//bazel/ext:boost",
+        "//bazel/ext:spdlog",
     ],
     visibility = ["//visibility:public"],
 )

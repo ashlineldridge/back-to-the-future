@@ -1,3 +1,4 @@
+load("@rules_foreign_cc//tools/build_defs:cmake.bzl", "cmake_external")
 load("@rules_foreign_cc//tools/build_defs:configure.bzl", "configure_make")
 load("@rules_foreign_cc//tools/build_defs:boost_build.bzl", "boost_build")
 
@@ -5,7 +6,7 @@ package(default_visibility = ["//visibility:public"])
 
 configure_make(
     name = "nghttp2",
-    lib_source = "@nghttp2//:all",    
+    lib_source = "@nghttp2//:all",
     configure_options = [
         "--enable-lib-only",
         "--enable-static",
@@ -19,7 +20,7 @@ configure_make(
     ],
     configure_env_vars = {
         "CXXFLAGS": "-std=c++14",
-        "AR": "/usr/bin/ar",        
+        "AR": "/usr/bin/ar",
     },
     deps = [
         ":boost",
@@ -52,11 +53,11 @@ config_setting(
 
 configure_make(
     name = "openssl",
-    lib_source = "@openssl//:all",    
+    lib_source = "@openssl//:all",
     configure_command = "config",
     configure_options = [
         "no-shared",
-    ] + 
+    ] +
     select({
         ":darwin_build": [
             "enable-ec_nistp_64_gcc_128",
@@ -65,8 +66,7 @@ configure_make(
             "no-comp",
         ],
         "//conditions:default": []}),
-    visibility = ["//visibility:public"],
-    configure_env_vars = 
+    configure_env_vars =
     select({
         ":darwin_build": {
             "OSX_DEPLOYMENT_TARGET": "10.15",
@@ -76,5 +76,22 @@ configure_make(
     static_libraries = [
         "libssl.a",
         "libcrypto.a",
-    ]
+    ],
+    visibility = ["//visibility:public"],
+)
+
+cmake_external(
+    name = "fmt",
+    lib_source = "@fmt//:all",
+    static_libraries = ["libfmt.a"],
+    visibility = ["//visibility:public"],
+)
+
+cmake_external(
+    name = "spdlog",
+    lib_source = "@spdlog//:all",
+    static_libraries = ["libspdlog.a"],
+    # Use our version of fmt rather than spdlog's prepackaged version
+    deps = [":fmt"],
+    visibility = ["//visibility:public"],
 )
