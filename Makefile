@@ -41,6 +41,14 @@ build:
 	bazel build //src/exe:app
 
 ##
+## Run the application.
+##
+.PHONY: run
+run: build
+	@$(call banner,Running)
+	./bazel-bin/src/exe/app
+
+##
 ## Build clangd compilation database.
 ##
 .PHONY: compdb

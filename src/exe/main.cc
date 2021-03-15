@@ -1,45 +1,34 @@
+#include <cstdlib>
 #include <fmt/core.h>
 #include <iostream>
 #include <nghttp2/asio_http2_server.h>
+#include <spdlog/common.h>
 #include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_sinks.h>
 
 using namespace nghttp2::asio_http2;
 using namespace nghttp2::asio_http2::server;
 
-const int PORT = 9000;
+const auto SERVER_PORT = 9000;
+const auto DEFAULT_LOG_LEVEL = spdlog::level::info;
+const auto DEFAULT_LOG_FORMAT = "[%Y-%m-%d %T.%e][%t][%L] %v";
 
-int main(int argc, char *argv[]) {
-    spdlog::info("Welcome to spdlog!");
-    spdlog::error("Some error message with arg: {}", 1);
+int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
+  spdlog::set_level(DEFAULT_LOG_LEVEL);
+  spdlog::set_pattern(DEFAULT_LOG_FORMAT);
+  auto logger = spdlog::stdout_logger_mt("global");
 
-    spdlog::warn("Easy padding in numbers like {:08d}", 12);
-    spdlog::critical("Support for int: {0:d};  hex: {0:x};  oct: {0:o}; bin: {0:b}", 42);
-    spdlog::info("Support for floats {:03.2f}", 1.23456);
-    spdlog::info("Positional args are {1} {0}..", "too", "supported");
-    spdlog::info("{:<30}", "left aligned");
-
-    spdlog::set_level(spdlog::level::debug); // Set global log level to debug
-    spdlog::debug("This message should be displayed..");
-
-    // change log pattern
-    spdlog::set_pattern("[%H:%M:%S %z] [%n] [%^---%L---%$] [thread %t] %v");
-
-    // Compile time log levels
-    // define SPDLOG_ACTIVE_LEVEL to desired level
-    SPDLOG_TRACE("Some trace message with param {}", 42);
-    SPDLOG_DEBUG("Some debug message");
-
-  boost::system::error_code ec;
   http2 server;
-
-  server.handle("/", [](const request &req, const response &res) {
+  server.handle("/", []([[maybe_unused]] const request &req, const response &res) {
     res.write_head(200);
-    res.end("hello, world\n");
+    res.end("Hello, world!\n");
   });
 
-  fmt::print("Listening on http://localhost:{}\n", PORT);
+  logger->info("Listening on http://localhost:{}\n", SERVER_PORT);
 
-  if (server.listen_and_serve(ec, "localhost", "9000")) {
-    std::cerr << "error: " << ec.message() << std::endl;
+  boost::system::error_code ec;
+  if (server.listen_and_serve(ec, "localhost", fmt::format("{}", SERVER_PORT))) {
+    logger->error("Error running server: {}", ec.message());
+    exit(1);
   }
 }
