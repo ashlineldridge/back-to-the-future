@@ -6,6 +6,7 @@ compilation_database(
     name = "compdb",
     targets = [
         "//src/exe:app",
+        "//test/domain:domain-test",
     ],
     # TODO: Can this directory not be hardcoded?
     exec_root = "/private/var/tmp/_bazel_aeldridge/b93242d36e9fcc45e1545a99acc2b884/execroot/cbot"

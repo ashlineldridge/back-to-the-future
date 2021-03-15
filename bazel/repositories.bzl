@@ -1,4 +1,3 @@
-load("@bazel_tools//tools/build_defs/repo:git.bzl", "git_repository")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 all_content = """
@@ -8,6 +7,13 @@ visibility = ["//visibility:public"])
 """
 
 def init_repositories():
+    http_archive(
+        name = "abseil",
+        sha256 = "b90d290ef07cdbad6df93b582217fba7cb8bf9e44f23b1ab5240239b1130e2b1",
+        strip_prefix = "abseil-cpp-2e9532cc6c701a8323d0cffb468999ab804095ab",
+        # Abseil follows "live at head" philosphy. This is the latest commit at time of writing.
+        url = "https://github.com/abseil/abseil-cpp/archive/2e9532cc6c701a8323d0cffb468999ab804095ab.tar.gz",
+    )
     http_archive(
         name = "bazel_compdb",
         sha256 = "bcecfd622c4ef272fd4ba42726a52e140b961c4eac23025f18b346c968a8cfb4",
@@ -35,9 +41,10 @@ def init_repositories():
     )
     http_archive(
         name = "googletest",
-        sha256 = "9dc9157a9a1551ec7a7e43daea9a694a0bb5fb8bec81235d8a1e6ef64c716dcb",
-        strip_prefix = "googletest-release-1.10.0",
-        url = "https://github.com/google/googletest/archive/release-1.10.0.tar.gz",
+        sha256 = "4643aa8e9d80621230fb5020875109c7241ceb4bc52a93e838fed946063f7a09",
+        strip_prefix = "googletest-e8512bc38c4c0060858c3306b0660a3f126aee30",
+        # GoogleTest follows "live at head" philosphy. This is the latest commit at time of writing.
+        url = "https://github.com/google/googletest/archive/e8512bc38c4c0060858c3306b0660a3f126aee30.tar.gz",
     )
     http_archive(
         name = "nghttp2",
@@ -55,9 +62,9 @@ def init_repositories():
     )
     http_archive(
         name = "rules_foreign_cc",
-        sha256 = "c2cdcf55ffaf49366725639e45dedd449b8c3fe22b54e31625eb80ce3a240f1e",
+        sha256 = "a743f79ae96bd4bdace6f582b88dcfbdfbe5aeb8ff9f7b61ed5c65e2f774cda8",
         strip_prefix = "rules_foreign_cc-0.1.0",
-        url = "https://github.com/bazelbuild/rules_foreign_cc/archive/0.1.0.zip",
+        url = "https://github.com/bazelbuild/rules_foreign_cc/archive/0.1.0.tar.gz",
     )
     http_archive(
         name = "spdlog",

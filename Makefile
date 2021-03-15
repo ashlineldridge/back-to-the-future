@@ -41,6 +41,14 @@ build:
 	bazel build //src/exe:app
 
 ##
+## Test the application.
+##
+.PHONY: test
+test:
+	@$(call banner,Testing)
+	bazel test //test/...
+
+##
 ## Run the application.
 ##
 .PHONY: run

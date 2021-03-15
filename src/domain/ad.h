@@ -11,3 +11,5 @@ enum class AdType {
 
 
 class Ad {};
+
+std::string hello() { return "Hi"; }

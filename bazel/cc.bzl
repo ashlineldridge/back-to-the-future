@@ -14,6 +14,10 @@ default_copts = [
     "-std=c++2a",
 ]
 
+default_test_deps = [
+    "//bazel/ext:googletest",
+]
+
 def cc_binary(name, copts = [], **kargs):
     native.cc_binary(
         name = name,
@@ -24,4 +28,11 @@ def cc_library(name, copts = [], **kargs):
     native.cc_library(
         name = name,
         copts = copts + default_copts,
+        **kargs)
+
+def cc_test(name, copts = [], deps = [], **kargs):
+    native.cc_test(
+        name = name,
+        copts = copts + default_copts,
+        deps = deps + default_test_deps,
         **kargs)

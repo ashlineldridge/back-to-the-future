@@ -95,3 +95,15 @@ cmake_external(
     deps = [":fmt"],
     visibility = ["//visibility:public"],
 )
+
+# These aliases allow these Bazel-native dependencies to be accessed using the
+# same syntax (i.e., //bazel/ext:dep) as the foreign ones above.
+alias(
+    name = "googletest",
+    actual = "@googletest//:gtest_main"
+)
+
+alias(
+    name = "abseil_base",
+    actual = "@abseil//absl/base:base"
+)

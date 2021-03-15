@@ -15,7 +15,7 @@ provided by [lsp-mode][04].
 
 - Get this building for both Darwin and Linux (create docker-build target).
 - Add targets for linting, etc.
-- Add BZ target for compdb.
+- Get unit tests working and get compdb working for tests
 
 <!-- Links -->
 
