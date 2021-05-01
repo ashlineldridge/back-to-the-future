@@ -62,7 +62,7 @@ test:
 ## Run the application.
 ##
 .PHONY: run
-run: build
+run: build-debug
 	@$(call banner,Running)
 	./bazel-bin/src/main/main
 
