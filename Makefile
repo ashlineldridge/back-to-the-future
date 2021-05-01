@@ -33,12 +33,22 @@ expunge:
 	bazel clean --expunge
 
 ##
-## Build the application.
+## Build the release configuration of the application.
 ##
-.PHONY: build
-build:
-	@$(call banner,Building)
-	bazel build //src/exe:app
+.PHONY: build-release
+build-release:
+	@$(call banner,Building release configuration)
+	bazel build --config=release //src/main
+
+##
+## Build the debug configuration of the application.
+## Note: --sandbox_debug is required due to
+## https://github.com/bazelbuild/bazel/issues/6327#issuecomment-427868122
+##
+.PHONY: build-debug
+build-debug:
+	@$(call banner,Building debug configuration)
+	bazel build --config=debug --sandbox_debug //src/main
 
 ##
 ## Test the application.
@@ -54,7 +64,7 @@ test:
 .PHONY: run
 run: build
 	@$(call banner,Running)
-	./bazel-bin/src/exe/app
+	./bazel-bin/src/main/main
 
 ##
 ## Build clangd compilation database.
@@ -62,5 +72,5 @@ run: build
 .PHONY: compdb
 compdb:
 	@$(call banner,Building compilation database)
-	bazel build //bazel:compdb
+	bazel build --config=debug --sandbox_debug //bazel:compdb
 	@ln -sf bazel-bin/bazel/compile_commands.json compile_commands.json

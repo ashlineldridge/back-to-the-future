@@ -46,11 +46,6 @@ boost_build(
     visibility = ["//visibility:public"],
 )
 
-config_setting(
-    name = "darwin_build",
-    values = {"cpu": "darwin"},
-)
-
 configure_make(
     name = "openssl",
     lib_source = "@openssl//:all",
@@ -59,7 +54,7 @@ configure_make(
         "no-shared",
     ] +
     select({
-        ":darwin_build": [
+        "//bazel:darwin_build": [
             "enable-ec_nistp_64_gcc_128",
             "no-ssl2",
             "no-ssl3",
@@ -68,7 +63,7 @@ configure_make(
         "//conditions:default": []}),
     configure_env_vars =
     select({
-        ":darwin_build": {
+        "//bazel:darwin_build": {
             "OSX_DEPLOYMENT_TARGET": "10.15",
             "AR": "/usr/bin/ar",
         },
@@ -83,21 +78,28 @@ configure_make(
 cmake_external(
     name = "fmt",
     lib_source = "@fmt//:all",
-    static_libraries = ["libfmt.a"],
+    static_libraries = select({
+        "//bazel:debug_build": ["libfmtd.a"],
+        "//conditions:default": ["libfmt.a"],
+    }),
     visibility = ["//visibility:public"],
 )
 
 cmake_external(
     name = "spdlog",
     lib_source = "@spdlog//:all",
-    static_libraries = ["libspdlog.a"],
+    static_libraries = select({
+        "//bazel:debug_build": ["libspdlogd.a"],
+        "//conditions:default": ["libspdlog.a"],
+    }),
+
     # Use our version of fmt rather than spdlog's prepackaged version
     deps = [":fmt"],
     visibility = ["//visibility:public"],
 )
 
 # These aliases allow these Bazel-native dependencies to be accessed using the
-# same syntax (i.e., //bazel/ext:dep) as the foreign ones above.
+# same syntax (i.e., //bazel/external:dep) as the foreign ones above.
 alias(
     name = "googletest",
     actual = "@googletest//:gtest_main"
@@ -105,5 +107,5 @@ alias(
 
 alias(
     name = "abseil_base",
-    actual = "@abseil//absl/base:base"
+    actual = "@com_google_absl//absl/base:base"
 )

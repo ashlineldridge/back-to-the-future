@@ -1,3 +1,4 @@
+# Following COPTS taken from Envoy.
 default_copts = [
     "-Wall",
     "-Wextra",
@@ -11,11 +12,10 @@ default_copts = [
     "-Wno-deprecated-declarations",
     "-Wno-dangling-gsl",
     "-Wno-deprecated-copy",
-    "-std=c++2a",
 ]
 
 default_test_deps = [
-    "//bazel/ext:googletest",
+    "//bazel/external:googletest",
 ]
 
 def cc_binary(name, copts = [], **kargs):

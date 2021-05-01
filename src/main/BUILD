@@ -1,15 +1,15 @@
 load("//bazel:cc.bzl", "cc_binary")
 
 cc_binary(
-    name = "app",
+    name = "main",
     srcs = [
         "main.cc",
     ],
     deps = [
-        "//src/domain",
-        "//bazel/ext:nghttp2",
-        "//bazel/ext:boost",
-        "//bazel/ext:spdlog",
+        "//src/logger",
+        "//bazel/external:nghttp2",
+        "//bazel/external:boost",
+        "//bazel/external:spdlog",
     ],
     visibility = ["//visibility:public"],
 )

@@ -24,6 +24,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
     res.end("Hello, world!\n");
   });
 
+  // Why is there launch and attach? Do I need both?
   logger->info("Listening on http://localhost:{}\n", SERVER_PORT);
 
   boost::system::error_code ec;

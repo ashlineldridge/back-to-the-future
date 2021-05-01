@@ -8,13 +8,6 @@ visibility = ["//visibility:public"])
 
 def init_repositories():
     http_archive(
-        name = "abseil",
-        sha256 = "b90d290ef07cdbad6df93b582217fba7cb8bf9e44f23b1ab5240239b1130e2b1",
-        strip_prefix = "abseil-cpp-2e9532cc6c701a8323d0cffb468999ab804095ab",
-        # Abseil follows "live at head" philosphy. This is the latest commit at time of writing.
-        url = "https://github.com/abseil/abseil-cpp/archive/2e9532cc6c701a8323d0cffb468999ab804095ab.tar.gz",
-    )
-    http_archive(
         name = "bazel_compdb",
         sha256 = "bcecfd622c4ef272fd4ba42726a52e140b961c4eac23025f18b346c968a8cfb4",
         strip_prefix = "bazel-compilation-database-0.4.5",
@@ -31,6 +24,15 @@ def init_repositories():
         strip_prefix = "boost_1_75_0",
         url = "https://dl.bintray.com/boostorg/release/1.75.0/source/boost_1_75_0.tar.gz",
         build_file_content = all_content,
+    )
+    http_archive(
+        # The Abseil remote repo must have this name as this is the name that googletest's
+        # Bazel build expects when absl=1 (see .bazelrc).
+        name = "com_google_absl",
+        sha256 = "b90d290ef07cdbad6df93b582217fba7cb8bf9e44f23b1ab5240239b1130e2b1",
+        strip_prefix = "abseil-cpp-2e9532cc6c701a8323d0cffb468999ab804095ab",
+        # Abseil follows "live at head" philosphy. This is the latest commit at time of writing.
+        url = "https://github.com/abseil/abseil-cpp/archive/2e9532cc6c701a8323d0cffb468999ab804095ab.tar.gz",
     )
     http_archive(
         name = "fmt",

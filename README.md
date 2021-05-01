@@ -13,9 +13,9 @@ provided by [lsp-mode][04].
 
 ## TODO
 
+- Have a look at manna and atlas_gateway for nghttp2_asio inspo.
 - Get this building for both Darwin and Linux (create docker-build target).
 - Add targets for linting, etc.
-- Get unit tests working and get compdb working for tests
 
 <!-- Links -->
 

@@ -1,0 +1,14 @@
+# We already have absl in the build, define absl=1 to tell googletest to use absl for backtrace.
+build --define absl=1
+build --cxxopt -std=c++2a
+
+build:debug --compilation_mode dbg
+build:debug --copt -g
+build:debug --strip never
+
+build:debug --crosstool_top=//bazel/toolchain:clang_suite
+build:debug --cpu=k8
+build:debug --host_crosstool_top=@bazel_tools//tools/cpp:toolchain
+
+build:release --compilation_mode opt
+build:release --copt -O1
